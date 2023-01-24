@@ -1,4 +1,4 @@
-import * as glMatrix from 'gl-matrix';
+import * as glMatrix from './node_modules/gl-matrix';
 
 
 var canvas = document.createElement('canvas')
