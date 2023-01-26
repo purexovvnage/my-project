@@ -151,14 +151,14 @@ const mvMatrix = glMatrix.mat4.create()
 const mvpMatrix = glMatrix.mat4.create()
 glMatrix.mat4.translate(modelMatrix,modelMatrix,[-1.5,0,-2])
 
-glMatrix.mat4.translate(viewMatrix,viewMatrix,[2,0,2])
+glMatrix.mat4.translate(viewMatrix,viewMatrix,[-2,0,1])
 glMatrix.mat4.invert(viewMatrix, viewMatrix)
 //glMatrix.mat4.translate(matrix,matrix,[.2,.5,-.2])
 //glMatrix.mat4.scale(matrix,matrix,[0.25,0.25,0.25])
 console.log(modelMatrix)
 
-var  moveX = 0.02
-var  moveY = 0.01
+var moveX = 0.02
+var moveY = 0.01
 var moveZ = 0.01
 var counter = 0
 
@@ -172,11 +172,23 @@ function animate() {
   glMatrix.mat4.rotateY(modelMatrix,modelMatrix,Math.PI/2/70)
   glMatrix.mat4.translate(modelMatrix,modelMatrix,[moveX,moveY,moveZ])
   counter++
-  if (counter%133===0){
-    moveX = moveX*getRandomArbitrary(-2,0)
-    moveY = moveY*getRandomArbitrary(-2,0)
-    moveZ = moveZ*getRandomArbitrary(-2,0)
+
+  if (counter%1111===0) {
+    moveX = moveX*getRandomArbitrary(-1,1)
+    moveY = moveY*getRandomArbitrary(-1,1)
+    moveZ = moveZ*getRandomArbitrary(-1,1)
+  } else if (counter%111===0) {
+    moveX = moveX *-1
+    moveY = moveY *-1
+    moveZ = moveZ *-1
+  } else if (moveX >=1 || moveY >=1 || moveZ >=1) {
+    moveX = -0.02
+    moveY = 0.01
+    moveZ = 0.01
+  } else if (counter > 100000) {
+    counter = 0
   }
+
   // P * M
   glMatrix.mat4.multiply(mvMatrix, viewMatrix, modelMatrix)
   glMatrix.mat4.multiply(mvpMatrix, projectionMatrix, mvMatrix)
