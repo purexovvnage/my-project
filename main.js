@@ -1,6 +1,5 @@
 import * as glMatrix from './node_modules/gl-matrix';
 
-
 var canvas = document.createElement('canvas')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
@@ -152,18 +151,32 @@ const mvMatrix = glMatrix.mat4.create()
 const mvpMatrix = glMatrix.mat4.create()
 glMatrix.mat4.translate(modelMatrix,modelMatrix,[-1.5,0,-2])
 
-glMatrix.mat4.translate(viewMatrix,viewMatrix,[-3,0,1])
+glMatrix.mat4.translate(viewMatrix,viewMatrix,[2,0,2])
 glMatrix.mat4.invert(viewMatrix, viewMatrix)
 //glMatrix.mat4.translate(matrix,matrix,[.2,.5,-.2])
 //glMatrix.mat4.scale(matrix,matrix,[0.25,0.25,0.25])
 console.log(modelMatrix)
 
+var  moveX = 0.02
+var  moveY = 0.01
+var moveZ = 0.01
+var counter = 0
+
+function getRandomArbitrary(min,max) {
+  return Math.random() * (max-min) + min;
+}
 function animate() {
   requestAnimationFrame(animate)
   glMatrix.mat4.rotateZ(modelMatrix,modelMatrix,Math.PI/2/70)
   glMatrix.mat4.rotateX(modelMatrix,modelMatrix,Math.PI/2/70)
   glMatrix.mat4.rotateY(modelMatrix,modelMatrix,Math.PI/2/70)
-
+  glMatrix.mat4.translate(modelMatrix,modelMatrix,[moveX,moveY,moveZ])
+  counter++
+  if (counter%133===0){
+    moveX = moveX*getRandomArbitrary(-2,0)
+    moveY = moveY*getRandomArbitrary(-2,0)
+    moveZ = moveZ*getRandomArbitrary(-2,0)
+  }
   // P * M
   glMatrix.mat4.multiply(mvMatrix, viewMatrix, modelMatrix)
   glMatrix.mat4.multiply(mvpMatrix, projectionMatrix, mvMatrix)
